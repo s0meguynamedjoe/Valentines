@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💙</title>
+
+<!-- iPhone App Mode -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="For You 💙">
+
+<!-- Home Screen Icon -->
+<link rel="apple-touch-icon" href="icons/blue-heart.png">
+
+<!-- Splash Screen -->
+<link rel="apple-touch-startup-image" href="icons/splash.png">
+
+<style>
+    body {
+        background: #d9ecff; /* light blue */
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+        padding-top: 60px;
+        color: #003d66; /* deep blue text */
+    }
+
+    h1 {
+        font-size: 2.8rem;
+        margin-bottom: 40px;
+        text-shadow: 0 0 8px silver;
+    }
+
+    .btn {
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin: 10px;
+        box-shadow: 0 0 10px silver;
+    }
+
+    #yesBtn {
+        background-color: #4da6ff; /* medium blue */
+        color: white;
+    }
+
+    #noBtn {
+        background-color: #7f8c8d; /* silver-gray */
+        color: white;
+        position: absolute;
+    }
+
+    /* Photo Album */
+    h2 {
+        margin-top: 80px;
+        font-size: 2rem;
+        color: #003d66;
+        text-shadow: 0 0 6px silver;
+    }
+
+    #photo-album {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+        padding-bottom: 80px;
+    }
+
+    #photo-album img {
+        width: 220px;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: 0 0 12px silver;
+        transition: transform 0.3s;
+    }
+
+    #photo-album img:hover {
+        transform: scale(1.08);
+    }
+
+    /* Floating Hearts */
+    #hearts-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .floating-heart {
+        position: absolute;
+        bottom: -20px;
+        font-size: 2rem;
+        color: #4da6ff; /* blue hearts */
+        animation: floatUp linear forwards;
+        opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+        0% {
+            transform: translateY(0) scale(1);
+            opacity: 0.8;
+        }
+        100% {
+            transform: translateY(-120vh) scale(1.5);
+            opacity: 0;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<h1>Will you be my Valentine?</h1>
+
+<button id="yesBtn" class="btn">Yes 💙</button>
+<button id="noBtn" class="btn">No 😢</button>
+
+<h2>Our Photo Album 💙</h2>
+<div id="photo-album"></div>
+
+<div id="hearts-container"></div>
+
+<script>
+/* Runaway No Button */
+const noBtn = document.getElementById("noBtn");
+
+function moveButton() {
+    const x = Math.random() * (window.innerWidth - 150);
+    const y = Math.random() * (window.innerHeight - 150);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+noBtn.addEventListener("mouseover", moveButton);
+noBtn.addEventListener("touchstart", moveButton);
+
+/* Floating Hearts */
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "floating-heart";
+    heart.innerText = "💙";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = 3 + Math.random() * 3 + "s";
+    document.getElementById("hearts-container").appendChild(heart);
+
+    setTimeout(() => heart.remove(), 6000);
+}
+
+setInterval(createHeart, 500);
+
+/* Photo Album Loader */
+const photos = [
+    "pic1.jpg",
+    "pic2.jpg",
+    "pic3.png"
+];
+
+const album = document.getElementById("photo-album");
+
+photos.forEach(file => {
+    const img = document.createElement("img");
+    img.src = "photos/" + file;
+    album.appendChild(img);
+});
+</script>
+
+</body>
+</html>
