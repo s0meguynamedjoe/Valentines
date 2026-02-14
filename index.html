@@ -17,11 +17,12 @@
 
 <style>
     body {
-        background: #d9ecff; /* light blue */
+        background: #d9ecff;
         font-family: 'Arial', sans-serif;
         text-align: center;
         padding-top: 60px;
-        color: #003d66; /* deep blue text */
+        color: #003d66;
+        overflow-x: hidden;
     }
 
     h1 {
@@ -41,19 +42,18 @@
     }
 
     #yesBtn {
-        background-color: #4da6ff; /* medium blue */
+        background-color: #4da6ff;
         color: white;
     }
 
     #noBtn {
-    background-color: #7f8c8d;
-    color: white;
-    position: absolute;
-    z-index: 9999; /* stays above photos */
-    transition: transform 0.15s ease; /* for bounce */
+        background-color: #7f8c8d;
+        color: white;
+        position: absolute;
+        z-index: 9999;
+        transition: transform 0.15s ease;
     }
 
-    /* Photo Album */
     h2 {
         margin-top: 80px;
         font-size: 2rem;
@@ -61,6 +61,7 @@
         text-shadow: 0 0 6px silver;
     }
 
+    /* Auto-scrolling album */
     #photo-album {
         display: flex;
         flex-direction: row;
@@ -72,12 +73,8 @@
         white-space: nowrap;
     }
 
-    #photo-album img {
-        flex-shrink: 0;
-    }
-
     #photo-album::-webkit-scrollbar {
-    display: none; /* hides scrollbar for a cleaner look */
+        display: none;
     }
 
     #photo-album img {
@@ -87,16 +84,7 @@
         border-radius: 12px;
         box-shadow: 0 0 12px silver;
         transition: transform 0.3s;
-        flex-shrink: 0; /* prevents images from shrinking */
-    }
-
-    #photo-album img {
-        width: 220px;
-        height: 220px;
-        object-fit: cover;
-        border-radius: 12px;
-        box-shadow: 0 0 12px silver;
-        transition: transform 0.3s;
+        flex-shrink: 0;
     }
 
     #photo-album img:hover {
@@ -118,11 +106,17 @@
         position: absolute;
         bottom: -20px;
         font-size: 2rem;
-        color: #4da6ff; /* blue hearts */
+        color: #4da6ff;
         animation: floatUp linear forwards;
         opacity: 0.8;
     }
 
+    @keyframes floatUp {
+        0% { transform: translateY(0) scale(1); opacity: 0.8; }
+        100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+    }
+
+    /* Celebration Confetti */
     .confetti-heart {
         position: fixed;
         font-size: 1.5rem;
@@ -135,17 +129,6 @@
         0% { transform: translateY(0) rotate(0deg); opacity: 1; }
         100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
     }
-
-    @keyframes floatUp {
-        0% {
-            transform: translateY(0) scale(1);
-            opacity: 0.8;
-        }
-        100% {
-            transform: translateY(-120vh) scale(1.5);
-            opacity: 0;
-        }
-    }
 </style>
 </head>
 
@@ -156,13 +139,13 @@
 <button id="yesBtn" class="btn">Yes 💙</button>
 <button id="noBtn" class="btn">No 😢</button>
 
-<h2>Photos 💙</h2>
+<h2>Our Photo Album 💙</h2>
 <div id="photo-album"></div>
 
 <div id="hearts-container"></div>
 
 <script>
-/* Runaway No Button */
+/* Runaway No Button with bounce */
 const noBtn = document.getElementById("noBtn");
 
 function moveButton() {
@@ -239,15 +222,12 @@ photos.forEach(file => {
 
 /* Seamless auto-scroll */
 function autoScrollAlbum() {
-    const album = document.getElementById("photo-album");
-
-    const scrollStep = 2;   // speed
-    const scrollDelay = 20; // smoothness
+    const scrollStep = 2;
+    const scrollDelay = 20;
 
     setInterval(() => {
         album.scrollLeft += scrollStep;
 
-        // When we reach halfway (end of original images), jump back
         if (album.scrollLeft >= album.scrollWidth / 2) {
             album.scrollLeft = 0;
         }
@@ -256,8 +236,7 @@ function autoScrollAlbum() {
 
 autoScrollAlbum();
 
-autoScrollAlbum();
-
+/* Celebration Confetti */
 function celebrate() {
     for (let i = 0; i < 40; i++) {
         const heart = document.createElement("div");
@@ -271,13 +250,14 @@ function celebrate() {
         setTimeout(() => heart.remove(), 2000);
     }
 }
+
+document.getElementById("yesBtn").addEventListener("click", celebrate);
+
+/* Smooth scroll to album */
+document.getElementById("yesBtn").addEventListener("click", () => {
+    album.scrollIntoView({ behavior: "smooth" });
 });
 </script>
-    
+
 </body>
-
 </html>
-
-
-
-
