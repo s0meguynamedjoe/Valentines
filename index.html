@@ -62,14 +62,18 @@
     }
 
     #photo-album {
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    gap: 15px;
-    margin-top: 20px;
-    padding: 20px;
-    white-space: nowrap;
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        gap: 15px;
+        margin-top: 20px;
+        padding: 20px;
+        white-space: nowrap;
+    }
+
+    #photo-album img {
+        flex-shrink: 0;
     }
 
     #photo-album::-webkit-scrollbar {
@@ -219,32 +223,38 @@ const photos = [
 
 const album = document.getElementById("photo-album");
 
+// Add original images
 photos.forEach(file => {
     const img = document.createElement("img");
     img.src = "photos/" + file;
     album.appendChild(img);
+});
 
-document.getElementById("yesBtn").addEventListener("click", celebrate);
+// Duplicate images for seamless loop
+photos.forEach(file => {
+    const img = document.createElement("img");
+    img.src = "photos/" + file;
+    album.appendChild(img);
+});
 
-/* Auto-scroll the photo album */
+/* Seamless auto-scroll */
 function autoScrollAlbum() {
     const album = document.getElementById("photo-album");
 
-    let scrollAmount = 0;
-    const scrollStep = 2; // speed
+    const scrollStep = 2;   // speed
     const scrollDelay = 20; // smoothness
 
     setInterval(() => {
         album.scrollLeft += scrollStep;
-        scrollAmount += scrollStep;
 
-        // If we reach the end, jump back to start
-        if (album.scrollLeft + album.clientWidth >= album.scrollWidth - 5) {
+        // When we reach halfway (end of original images), jump back
+        if (album.scrollLeft >= album.scrollWidth / 2) {
             album.scrollLeft = 0;
-            scrollAmount = 0;
         }
     }, scrollDelay);
 }
+
+autoScrollAlbum();
 
 autoScrollAlbum();
 
@@ -267,6 +277,7 @@ function celebrate() {
 </body>
 
 </html>
+
 
 
 
